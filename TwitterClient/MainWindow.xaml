@@ -1,0 +1,73 @@
+﻿<Window x:Class="Rockstar.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Rockstar"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Menu Grid.Row="0" Grid.ColumnSpan="2">
+            <MenuItem Header="_File">
+                <MenuItem IsEnabled="{Binding NotLoggedIn}" Click="MenuItem_Login" Header="_Login" />
+                <MenuItem IsEnabled="{Binding LoggedIn}" Click="MenuItem_Logout" Header="_Logout" />
+            </MenuItem>
+        </Menu>
+
+        <GroupBox Grid.Row="1" Grid.ColumnSpan="2" Margin="5,5,5,5">
+            
+            <GroupBox.Header>
+                Tweets
+            </GroupBox.Header>
+            
+            <ScrollViewer Grid.Row="1" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+
+                    <StackPanel Visibility="{Binding CollapsedIfLoggedIn}">
+                        <TextBlock>Please Log In (File->Login)</TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Visibility="{Binding VisibleIfLoggedIn}">
+                        <Button Click="Button_GetNewerTweets">Get Newer Tweets</Button>
+
+                        <ItemsControl Name="tweetList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="5,5,5,5" BorderThickness="1" CornerRadius="10" BorderBrush="Black">
+                                        <StackPanel Margin="5,5,5,5">
+                                            <TextBlock HorizontalAlignment="Right" Text="{Binding CreatedDate}"></TextBlock>
+                                            <TextBlock Margin="5,5,5,5" FontWeight="Bold" Text="{Binding ScreenName}"></TextBlock>
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding Text}"></TextBlock>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <Button Click="Button_GetOlderTweets">Get Older Tweets</Button>
+                    </StackPanel>
+
+                </StackPanel>
+            </ScrollViewer>
+        </GroupBox>
+
+        <TextBox Grid.Row="2" Grid.Column="0" IsEnabled="{Binding LoggedIn}" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" Height="100" x:Name="tweetTextBox"></TextBox>
+        <Button Grid.Row="2" Grid.Column="1" IsEnabled="{Binding LoggedIn}" Click="Button_PostTweets">Post Tweet</Button>
+
+        <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding Status}"></TextBlock>
+    </Grid>
+    
+</Window>
